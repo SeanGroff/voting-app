@@ -12,7 +12,7 @@ const app = express();
 
 (async () => {
   try {
-    await mongoose.connect('mongodb://localhost');
+    await mongoose.connect('mongodb://localhost/pollz');
     console.log('Database connection successful');
   } catch (err) {
     console.log(`Database connection failed, ${err}`);
