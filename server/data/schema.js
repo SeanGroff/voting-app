@@ -9,7 +9,6 @@ const typeDefs = `
 type Query {
   user(id: Int!): User
   users: [User]
-  userVotes(userId: Int!): [VoteOption]
   poll(id: Int!): Poll
   allPolls(userId: Int): [Poll]
   voteOption: VoteOption
@@ -18,15 +17,13 @@ type Query {
 }
 
 type User {
-  id: Int
-  username: String
+  id: String
+  name: String
   email: String
-  polls: [Poll]
-  userVotes: [VoteOption]
 }
 
 type Poll {
-  id: Int
+  id: String
   createdBy: User
   name: String
   pollOptions: [VoteOption]
@@ -34,11 +31,9 @@ type Poll {
 }
 
 type VoteOption {
-  id: Int
   poll: Poll
   name: String
   votes: Int
-  voters: [User]
 }
 `;
 

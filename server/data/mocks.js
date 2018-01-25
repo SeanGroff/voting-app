@@ -7,13 +7,8 @@ module.exports = {
     user: (root, args) => {
       return {
         id: args.id,
-        username: 'coolguy0711',
+        name: 'coolguy0711',
         email: 'coolguy0711@live.com',
-        polls: [
-          'Favorite Colors',
-          'Whats your favorite food?',
-          'Favorite framework?',
-        ],
       };
     },
     poll: (root, args) => {
@@ -34,7 +29,7 @@ module.exports = {
   }),
   User: () => ({
     id: () => casual.id,
-    username: () => casual.username,
+    name: () => casual.username,
     email: () => casual.email,
   }),
   Poll: () => ({
