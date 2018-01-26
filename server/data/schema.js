@@ -7,12 +7,11 @@ const resolvers = require('./resolvers');
 
 const typeDefs = `
 type Query {
-  user(id: String!): User
+  user(uid: String!): User
   users: [User]
-  poll(id: String!): Poll
-  allPolls(userId: String): [Poll]
-  voteOption: VoteOption
-  pollOptions(pollId: String!): [VoteOption]
+  poll(pid: String!): Poll
+  allPolls(uid: String): [Poll]
+  pollOptions(pid: String!): [PollOption]
   createdBy: User
 }
 
@@ -22,17 +21,17 @@ type User {
   email: String
 }
 
+type PollOption {
+  id: String
+  name: String
+  votes: Int
+}
+
 type Poll {
   id: String
   createdBy: User
   name: String
-  pollOptions: [VoteOption]
-  votes: Int
-}
-
-type VoteOption {
-  poll: Poll
-  name: String
+  pollOptions: [PollOption]
   votes: Int
 }
 `;

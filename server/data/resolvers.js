@@ -47,37 +47,19 @@ module.exports = {
         pollOptions: poll.pollOptions,
       }));
     },
-    voteOption(root, args) {
-      return {
-        name: 'Coolest',
-        votes: 76,
-      };
-    },
   },
   User: {},
   Poll: {
-    createdBy(poll) {
-      console.log(poll);
-      return poll.createdBy;
+    createdBy({ createdBy }) {
+      return UserModel.findOne({ _id: createdBy });
     },
     pollOptions(poll) {
-      return [
-        {
-          name: 'Coolest',
-          votes: 76,
-        },
-        {
-          name: 'Cool',
-          votes: 29,
-        },
-      ];
+      return poll.pollOptions.map(option => ({
+        id: option._id,
+        name: option.name,
+        votes: option.votes,
+      }));
     },
   },
-  VoteOption: {
-    poll() {
-      return {
-        id: 123,
-      };
-    },
-  },
+  PollOption: {},
 };

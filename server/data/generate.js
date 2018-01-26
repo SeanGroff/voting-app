@@ -7,17 +7,13 @@ const PollModel = require('../models/PollModel');
 async function mongoData() {
   casual.seed(123);
   for (let i = 0; i < 10; i += 1) {
-    await UserModel.create({
+    const user = await UserModel.create({
       name: casual.first_name,
       email: casual.email,
     });
     await PollModel.create({
       name: casual.title,
-      createdBy: {
-        id: casual.id,
-        name: casual.name,
-        email: casual.email,
-      },
+      createdBy: user._id,
       votes: casual.integer((from = 0), (to = 1000)),
       pollOptions: [
         {
