@@ -2,7 +2,11 @@ const mongoose = require('mongoose');
 
 const poll = new mongoose.Schema({
   name: String,
-  createdBy: String,
+  createdBy: {
+    id: String,
+    name: String,
+    email: String,
+  },
   votes: Number,
   pollOptions: [
     {

@@ -5,51 +5,47 @@ const PollModel = require('../models/PollModel');
 
 module.exports = {
   Query: {
-    user(root, args) {
+    async user(root, args) {
+      const { _id, name, email } = await UserModel.findOne({ _id: args.id });
       return {
-        id: 1,
-        name: 'Cool Guy',
-        email: 'coolguys0711@live.com',
+        id: _id,
+        name,
+        email,
       };
     },
-    users(root, args) {
-      return UserModel.find().then(users =>
-        users.map(user => ({
-          id: user._id,
-          name: user.name,
-          email: user.email,
-        }))
-      );
+    async users(root, args) {
+      const users = await UserModel.find();
+      return users.map(user => ({
+        id: user._id,
+        name: user.name,
+        email: user.email,
+      }));
     },
-    poll(root, args) {
+    async poll(root, args) {
+      const {
+        _id,
+        name,
+        createdBy,
+        votes,
+        pollOptions,
+      } = await PollModel.findOne({ _id: args.id });
       return {
-        id: 123,
-        name: 'Cool Poll',
-        pollOptions: [{ name: 'cooler' }, { name: 'lame' }],
-        votes: 923,
+        id: _id,
+        name,
+        createdBy,
+        votes,
+        pollOptions,
       };
     },
-    allPolls(root, args) {
-      return [
-        {
-          id: 123,
-          name: 'Cool Poll',
-          pollOptions: [{ name: 'cooler' }, { name: 'lame' }],
-          votes: 923,
-        },
-        {
-          id: 234,
-          name: 'Cooler Poll',
-          pollOptions: [{ name: 'cooler' }, { name: 'lame' }],
-          votes: 234,
-        },
-        {
-          id: 457,
-          name: 'Coolest Poll',
-          pollOptions: [{ name: 'cooler' }, { name: 'lame' }],
-          votes: 26,
-        },
-      ];
+    async allPolls(root, args) {
+      const polls = await PollModel.find();
+      return polls.map(poll => ({
+        id: poll._id,
+        name: poll.name,
+        createdBy: poll.createdBy,
+        votes: poll.votes,
+        pollOptions: poll.pollOptions,
+      }));
     },
     voteOption(root, args) {
       return {
@@ -60,17 +56,9 @@ module.exports = {
   },
   User: {},
   Poll: {
-    createdBy(user) {
-      return {
-        id: 1,
-        name: 'Cool Guy',
-        email: 'coolguys0711@live.com',
-        polls: [
-          { name: 'Fav Color?' },
-          { name: 'Fav Actor?' },
-          { name: 'Fav singer?' },
-        ],
-      };
+    createdBy(poll) {
+      console.log(poll);
+      return poll.createdBy;
     },
     pollOptions(poll) {
       return [

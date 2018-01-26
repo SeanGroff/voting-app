@@ -13,7 +13,11 @@ async function mongoData() {
     });
     await PollModel.create({
       name: casual.title,
-      createdBy: casual.email,
+      createdBy: {
+        id: casual.id,
+        name: casual.name,
+        email: casual.email,
+      },
       votes: casual.integer((from = 0), (to = 1000)),
       pollOptions: [
         {
