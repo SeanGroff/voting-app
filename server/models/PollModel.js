@@ -3,6 +3,7 @@ const schema = mongoose.Schema;
 
 const poll = new schema({
   name: String,
+  url: String,
   createdBy: { type: schema.ObjectId, ref: 'UserModel' },
   votes: Number,
   pollOptions: [

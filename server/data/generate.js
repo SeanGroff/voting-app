@@ -15,6 +15,7 @@ async function mongoData() {
       name: casual.title,
       createdBy: user._id,
       votes: casual.integer((from = 0), (to = 1000)),
+      url: casual.url,
       pollOptions: [
         {
           name: casual.title,

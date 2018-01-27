@@ -6,7 +6,7 @@ const PollModel = require('../models/PollModel');
 module.exports = {
   Query: {
     async user(root, args) {
-      const { _id, name, email } = await UserModel.findOne({ _id: args.id });
+      const { _id, name, email } = await UserModel.findOne({ _id: args.uid });
       return {
         id: _id,
         name,
@@ -28,7 +28,7 @@ module.exports = {
         createdBy,
         votes,
         pollOptions,
-      } = await PollModel.findOne({ _id: args.id });
+      } = await PollModel.findOne({ _id: args.pid });
       return {
         id: _id,
         name,
@@ -37,17 +37,27 @@ module.exports = {
         pollOptions,
       };
     },
-    async allPolls(root, args) {
-      const polls = await PollModel.find();
+    async userPolls(root, args) {
+      const polls = await PollModel.find({ createdBy: args.uid });
       return polls.map(poll => ({
         id: poll._id,
         name: poll.name,
+        url: poll.url,
         createdBy: poll.createdBy,
         votes: poll.votes,
         pollOptions: poll.pollOptions,
       }));
     },
   },
+  // Mutation: {
+  // Vote
+  // Create a poll
+  // Delete own poll
+  // Add new option to poll
+  // Register Account
+  // Login
+  // Logout
+  // },
   User: {},
   Poll: {
     createdBy({ createdBy }) {

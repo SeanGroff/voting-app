@@ -10,9 +10,7 @@ type Query {
   user(uid: String!): User
   users: [User]
   poll(pid: String!): Poll
-  allPolls(uid: String): [Poll]
-  pollOptions(pid: String!): [PollOption]
-  createdBy: User
+  userPolls(uid: String!): [Poll]
 }
 
 type User {
@@ -31,8 +29,9 @@ type Poll {
   id: String
   createdBy: User
   name: String
-  pollOptions: [PollOption]
   votes: Int
+  url: String
+  pollOptions: [PollOption]
 }
 `;
 
