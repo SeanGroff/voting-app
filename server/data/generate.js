@@ -10,6 +10,7 @@ async function mongoData() {
     const user = await UserModel.create({
       name: casual.first_name,
       email: casual.email,
+      password: casual.password,
     });
     await PollModel.create({
       name: casual.title,
