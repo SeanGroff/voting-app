@@ -1,16 +1,21 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const { graphqlExpress, graphiqlExpress } = require('apollo-server-express');
+const session = require('express-session');
 const bodyParser = require('body-parser');
+const morgan = require('morgan');
+const jwt = require('jsonwebtoken');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
+const { graphqlExpress, graphiqlExpress } = require('apollo-server-express');
 
 const UserModel = require('./models/UserModel');
 const schema = require('./data/schema');
+const config = require('./config');
 
 // const generate = require('./data/generate');
 
 const PORT = process.env.PORT || 1337;
+const secret = config.secret();
 
 const app = express();
 
@@ -22,10 +27,10 @@ passport.use(
         return done(err);
       }
       if (!user) {
-        return done(null, false, { message: 'Incorrect username.' });
+        return done(null, false);
       }
       if (user.password !== password) {
-        return done(null, false, { message: 'Incorrect password.' });
+        return done(null, false);
       }
       return done(null, user);
     });
@@ -48,7 +53,7 @@ passport.deserializeUser(async function(id, cb) {
 // Connect to Database
 (async () => {
   try {
-    await mongoose.connect('mongodb://localhost/pollz');
+    await mongoose.connect(config.database);
     console.log('Database connection successful');
   } catch (err) {
     console.log(`Database connection failed, ${err}`);
@@ -57,9 +62,15 @@ passport.deserializeUser(async function(id, cb) {
 
 // generate.mongoData();
 
+// Setup express session
+app.use(session({ secret, resave: false, saveUninitialized: false }));
+
 // Body Parser
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
+// use morgan to log requests to the console
+app.use(morgan('dev'));
 
 // GraphQL
 app.use('/graphql', bodyParser.json(), graphqlExpress({ schema }));
@@ -70,19 +81,23 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Routes
-app.get('/', (req, res) => res.json({ hello: 'world' }));
+app.get('/', (req, res) => res.redirect('/login'));
 
 app.get('/login', (req, res) => {
   res.sendFile(`${__dirname}/views/Login.html`);
 });
 
-app.post(
-  '/login',
-  passport.authenticate('local', { failureRedirect: '/login' }),
-  function(req, res) {
-    res.redirect('/');
-  }
-);
+app.post('/login', passport.authenticate('local'), (req, res) => {
+  const payload = {
+    id: req.user._id,
+  };
+
+  const token = jwt.sign(payload, secret, {
+    expiresIn: '24h',
+  });
+
+  res.json({ token });
+});
 
 app.listen(PORT, () =>
   console.log(`GraphiQL running on http://localhost:${PORT}/graphiql`)
