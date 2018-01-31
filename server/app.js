@@ -73,7 +73,26 @@ app.use(bodyParser.json());
 app.use(morgan('dev'));
 
 // GraphQL
-app.use('/graphql', bodyParser.json(), graphqlExpress({ schema }));
+app.use(
+  '/graphql',
+  bodyParser.json(),
+  graphqlExpress(req => {
+    /**
+     * THEORY
+     * 1) User Stores token in localStorage
+     * 2) User sends the token in the header with every request?
+     * 3) Verify the JWT in each resolver ?
+     */
+
+    // console.log(JSON.stringify(req.headers));
+    return {
+      schema,
+      // context: {
+      //   token: req.headers.token,
+      // },
+    };
+  })
+);
 app.use('/graphiql', graphiqlExpress({ endpointURL: '/graphql' }));
 
 // Passport Init
