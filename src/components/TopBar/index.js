@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Menu } from 'semantic-ui-react';
 
 export default class TopBar extends Component {
   state = {
@@ -22,26 +21,32 @@ export default class TopBar extends Component {
   render() {
     const { activeItem } = this.state;
     return (
-      <Menu color="teal" size="huge" inverted fluid stackable tabular>
-        <Menu.Item
-          as={Link}
-          to="/"
-          name="home"
-          active={activeItem === 'home'}
-          onClick={() => this._handleClick('home')}
-        >
-          Home
-        </Menu.Item>
-        <Menu.Item
-          as={Link}
-          to="/login"
-          name="signin"
-          active={activeItem === 'signin'}
-          onClick={() => this._handleClick('signin')}
-        >
-          Sign in
-        </Menu.Item>
-      </Menu>
+      <nav className="navbar" aria-label="main navigation">
+        <div className="container is-fluid">
+          <div className="navbar-brand">
+            <Link
+              className={`navbar-item ${
+                activeItem === 'home' ? 'is-active' : null
+              }`}
+              to="/"
+            >
+              {'Home'}
+            </Link>
+            <button className="button navbar-burger">
+              <span>Home</span>
+              <span>Login</span>
+              <span>Sign up</span>
+            </button>
+          </div>
+          <div className="navbar-menu">
+            <div className="navbar-end">
+              <Link className="navbar-item" to="/login">
+                {'Login'}
+              </Link>
+            </div>
+          </div>
+        </div>
+      </nav>
     );
   }
 }
