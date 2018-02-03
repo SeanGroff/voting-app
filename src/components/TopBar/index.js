@@ -21,8 +21,8 @@ export default class TopBar extends Component {
   render() {
     const { activeItem } = this.state;
     return (
-      <nav className="navbar is-primary" aria-label="main navigation">
-        <div className="container is-fluid">
+      <nav className="navbar is-light" aria-label="main navigation">
+        <div className="container">
           <div className="navbar-brand">
             <div className="navbar-item">Pollz</div>
             <button className="button navbar-burger">

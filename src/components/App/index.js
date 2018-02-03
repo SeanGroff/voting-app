@@ -5,10 +5,6 @@ import DefaultLayout from '../DefaultLayout';
 
 export default class App extends Component {
   render() {
-    return (
-      <div className="columns is-centered">
-        <DefaultLayout />
-      </div>
-    );
+    return <DefaultLayout />;
   }
 }

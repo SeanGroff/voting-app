@@ -1,59 +1,63 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import {
-  Button,
-  Form,
-  Grid,
-  Header,
-  Message,
-  Segment,
-} from 'semantic-ui-react';
 
 export default function Login() {
   return (
-    <div className="login-form">
-      <style>{`
-      body > div,
-      body > div > div,
-      body > div > div > div.login-form {
-        height: 100%;
-      }
-    `}</style>
-      <Grid
-        textAlign="center"
-        style={{ height: '100%' }}
-        verticalAlign="middle"
-      >
-        <Grid.Column style={{ maxWidth: 450 }}>
-          <Header as="h2" color="teal" textAlign="center">
-            {' Log-in to your account'}
-          </Header>
-          <Form size="large">
-            <Segment stacked>
-              <Form.Input
-                fluid
-                icon="user"
-                iconPosition="left"
-                placeholder="E-mail address"
-              />
-              <Form.Input
-                fluid
-                icon="lock"
-                iconPosition="left"
-                placeholder="Password"
-                type="password"
-              />
+    <form className="columns is-centered is-marginless">
+      <div className="column" style={{ maxWidth: '512px' }}>
+        <div className="field">
+          <label className="label">Name</label>
+          <div className="control">
+            <input className="input" type="text" placeholder="Text input" />
+          </div>
+        </div>
 
-              <Button color="teal" fluid size="large">
-                Login
-              </Button>
-            </Segment>
-          </Form>
-          <Message>
-            New to us? <Link to="/signup">Sign Up</Link>
-          </Message>
-        </Grid.Column>
-      </Grid>
-    </div>
+        <div className="field">
+          <label className="label">Username</label>
+          <div className="control has-icons-left has-icons-right">
+            <input
+              className="input is-success"
+              type="text"
+              placeholder="Text input"
+              value="bulma"
+            />
+            <span className="icon is-small is-left">
+              <i className="fas fa-user" />
+            </span>
+            <span className="icon is-small is-right">
+              <i className="fas fa-check" />
+            </span>
+          </div>
+          <p className="help is-success">This username is available</p>
+        </div>
+
+        <div className="field">
+          <label className="label">Email</label>
+          <div className="control has-icons-left has-icons-right">
+            <input
+              className="input is-danger"
+              type="email"
+              placeholder="Email input"
+              value="hello@"
+            />
+            <span className="icon is-small is-left">
+              <i className="fas fa-envelope" />
+            </span>
+            <span className="icon is-small is-right">
+              <i className="fas fa-exclamation-triangle" />
+            </span>
+          </div>
+          <p className="help is-danger">This email is invalid</p>
+        </div>
+
+        <div className="field is-grouped">
+          <div className="control">
+            <button className="button is-success is-link">Submit</button>
+          </div>
+          <div className="control">
+            <button className="button is-danger is-link">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </form>
   );
 }
