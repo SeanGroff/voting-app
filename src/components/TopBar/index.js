@@ -21,17 +21,10 @@ export default class TopBar extends Component {
   render() {
     const { activeItem } = this.state;
     return (
-      <nav className="navbar" aria-label="main navigation">
+      <nav className="navbar is-primary" aria-label="main navigation">
         <div className="container is-fluid">
           <div className="navbar-brand">
-            <Link
-              className={`navbar-item ${
-                activeItem === 'home' ? 'is-active' : null
-              }`}
-              to="/"
-            >
-              {'Home'}
-            </Link>
+            <div className="navbar-item">Pollz</div>
             <button className="button navbar-burger">
               <span>Home</span>
               <span>Login</span>
@@ -39,8 +32,25 @@ export default class TopBar extends Component {
             </button>
           </div>
           <div className="navbar-menu">
+            <div className="navbar-start">
+              <Link
+                className={`navbar-item ${
+                  activeItem === 'home' ? 'is-active' : ''
+                }`}
+                to="/"
+                onClick={() => this._handleClick('home')}
+              >
+                {'Home'}
+              </Link>
+            </div>
             <div className="navbar-end">
-              <Link className="navbar-item" to="/login">
+              <Link
+                className={`navbar-item ${
+                  activeItem === 'login' ? 'is-active' : ''
+                }`}
+                to="/login"
+                onClick={() => this._handleClick('login')}
+              >
                 {'Login'}
               </Link>
             </div>
