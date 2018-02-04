@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 export default class TopBar extends Component {
   state = {
     activeItem: '',
+    isActive: false,
   };
 
   componentDidMount() {
@@ -18,20 +19,29 @@ export default class TopBar extends Component {
     }));
   };
 
+  _handleHamburgerClick = () => {
+    this.setState(prevState => ({
+      isActive: !prevState.isActive,
+    }));
+  };
+
   render() {
-    const { activeItem } = this.state;
+    const { activeItem, isActive } = this.state;
     return (
       <nav className="navbar is-light" aria-label="main navigation">
         <div className="container">
           <div className="navbar-brand">
             <div className="navbar-item">Pollz</div>
-            <button className="button navbar-burger">
-              <span>Home</span>
-              <span>Login</span>
-              <span>Sign up</span>
+            <button
+              className={`button navbar-burger ${isActive ? 'is-active' : ''}`}
+              onClick={this._handleHamburgerClick}
+            >
+              <span />
+              <span />
+              <span />
             </button>
           </div>
-          <div className="navbar-menu">
+          <div className={`navbar-menu ${isActive ? 'is-active' : ''}`}>
             <div className="navbar-start">
               <Link
                 className={`navbar-item ${

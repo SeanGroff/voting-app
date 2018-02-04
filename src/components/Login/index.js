@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
 
 import Login from './Login';
 
-export default class LoginContainer extends Component {
+class LoginContainer extends Component {
   render() {
     return <Login />;
   }
 }
+
+export default withRouter(LoginContainer);
