@@ -1,10 +1,12 @@
 import React from 'react';
 
+import Header from '../common/Header';
+
 export default function Login() {
   return (
     <form className="columns is-centered is-marginless">
       <div className="column" style={{ maxWidth: '512px' }}>
-        <h1 className="subtitle is-4 has-text-centered">Welcome!</h1>
+        <Header>Welcome!</Header>
         <div className="field">
           <label className="label">Name</label>
           <div className="control">
