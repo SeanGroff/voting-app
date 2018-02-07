@@ -1,69 +1,122 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 import Header from '../common/Header';
 
-export default function Login() {
+export default function Login({
+  formActive,
+  email,
+  isEmailValid,
+  password,
+  name,
+  handleNameChange,
+  handleEmailChange,
+  handlePasswordChange,
+  handleSubmit,
+}) {
   return (
-    <form className="columns is-centered is-marginless">
+    <form className="columns is-centered is-marginless" onSubmit={handleSubmit}>
       <div className="column" style={{ maxWidth: '512px' }}>
         <Header>Welcome!</Header>
         <div className="field">
           <label className="label">Name</label>
-          <div className="control">
-            <input className="input" type="text" placeholder="Text input" />
+          <div className="control has-icons-left">
+            <input
+              className={`input ${
+                formActive && name && name.length ? 'is-success' : ''
+              }`}
+              type="text"
+              placeholder="Text input"
+              required
+              value={name}
+              onChange={handleNameChange}
+            />
+            <span className="icon is-small is-left">
+              <i className="fas fa-user" />
+            </span>
           </div>
         </div>
 
         <div className="field">
           <label className="label">Email</label>
-          <div className="control has-icons-left has-icons-right">
+          <div className="control has-icons-left">
             <input
-              className="input is-danger"
+              className={`input ${isEmailValid && email ? 'is-success' : ''}`}
               type="email"
-              placeholder="Email input"
-              value="hello@"
+              placeholder="Email"
+              required
+              value={email}
+              onChange={handleEmailChange}
             />
             <span className="icon is-small is-left">
               <i className="fas fa-envelope" />
             </span>
-            <span className="icon is-small is-right">
-              <i className="fas fa-exclamation-triangle" />
-            </span>
           </div>
-          <p className="help is-danger">This email is invalid</p>
+          <p
+            className={
+              formActive && email.length && !isEmailValid
+                ? 'help is-danger'
+                : 'is-invisible'
+            }
+          >
+            This email is invalid
+          </p>
         </div>
 
         <div className="field">
           <label className="label">Password</label>
-          <div className="control has-icons-left has-icons-right">
+          <div className="control has-icons-left">
             <input
-              className="input"
-              type="text"
-              placeholder="Text input"
-              value="bulma"
+              className={`input ${
+                password && password.length ? 'is-success' : ''
+              }`}
+              type="password"
+              placeholder="Password"
+              required
+              value={password}
+              onChange={handlePasswordChange}
             />
             <span className="icon is-small is-left">
-              <i className="fas fa-user" />
-            </span>
-            <span className="icon is-small is-right">
-              <i className="fas fa-check" />
+              <i className="fas fa-unlock-alt" />
             </span>
           </div>
-          <p className="help is-success">This username is available</p>
         </div>
 
         <div className="field is-grouped">
           <div className="control">
-            <button className="button is-success is-link">Submit</button>
+            <button
+              className="button is-success is-link"
+              disabled={!name.length || !email.length || !password.length}
+              onClick={handleSubmit}
+            >
+              Submit
+            </button>
           </div>
           <div className="control">
-            <button className="button is-danger is-link">Cancel</button>
+            <Link to="/" className="button is-danger is-link">
+              Cancel
+            </Link>
           </div>
           <div className="control" style={{ marginLeft: 'auto' }}>
-            <button className="button is-info is-link">Register</button>
+            <Link to="/signup" className="button is-info is-link">
+              Register
+            </Link>
           </div>
         </div>
       </div>
     </form>
   );
 }
+
+Login.propTypes = {
+  formActive: PropTypes.bool,
+  email: PropTypes.string,
+  isEmailValid: PropTypes.bool,
+  password: PropTypes.string,
+  name: PropTypes.string,
+  handleSubmit: PropTypes.func.isRequired,
+  handleNameChange: PropTypes.func.isRequired,
+  handleEmailChange: PropTypes.func.isRequired,
+  handlePasswordChange: PropTypes.func.isRequired,
+};

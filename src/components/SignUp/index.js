@@ -15,58 +15,37 @@ export default class SignUpContainer extends Component {
   };
 
   _handleNameChange = e => {
-    this.state.name && this.state.name.length
-      ? this.setState({
-          name: e.target.value,
-          formActive: true,
-        })
-      : this.setState({
-          name: e.target.value,
-          isNameValid: false,
-          formActive: true,
-        });
+    this.setState({
+      name: e.target.value,
+      formActive: true,
+    });
   };
 
   _handleEmailChange = e => {
-    isEmail(e.target.value)
-      ? this.setState({
-          email: e.target.value,
-          isEmailValid: true,
-          formActive: true,
-        })
-      : this.setState({
-          email: e.target.value,
-          isEmailValid: false,
-          formActive: true,
-        });
+    const isValid = isEmail(e.target.value);
+    this.setState({
+      email: e.target.value,
+      isEmailValid: isValid,
+      formActive: true,
+    });
   };
 
   _handlePasswordChange = e => {
-    this.state.passwordConfirm === e.target.value
-      ? this.setState({
-          password: e.target.value,
-          passwordsMatch: true,
-          formActive: true,
-        })
-      : this.setState({
-          password: e.target.value,
-          passwordsMatch: false,
-          formActive: true,
-        });
+    const doPasswordsMatch = this.state.passwordConfirm === e.target.value;
+    this.setState({
+      password: e.target.value,
+      passwordsMatch: doPasswordsMatch,
+      formActive: true,
+    });
   };
 
   _handlePasswordConfirmChange = e => {
-    this.state.password === e.target.value
-      ? this.setState({
-          passwordConfirm: e.target.value,
-          passwordsMatch: true,
-          formActive: true,
-        })
-      : this.setState({
-          passwordConfirm: e.target.value,
-          passwordsMatch: false,
-          formActive: true,
-        });
+    const doPasswordsMatch = this.state.password === e.target.value;
+    this.setState({
+      passwordConfirm: e.target.value,
+      passwordsMatch: doPasswordsMatch,
+      formActive: true,
+    });
   };
 
   _handleSubmit = e => {

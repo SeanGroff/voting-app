@@ -49,6 +49,7 @@ export default function SignUp({
               type="email"
               placeholder="Email"
               required
+              value={email}
               onChange={handleEmailChange}
             />
             <span className="icon is-small is-left">
@@ -117,7 +118,12 @@ export default function SignUp({
           <div className="control">
             <button
               className="button is-success is-link"
-              disabled={!passwordsMatch}
+              disabled={
+                !name.length ||
+                !email.length ||
+                !passwordConfirm.length ||
+                !passwordsMatch
+              }
               onClick={handleSubmit}
             >
               Register
