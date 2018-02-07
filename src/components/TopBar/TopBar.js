@@ -37,6 +37,15 @@ export default function TopBar({
           <div className="navbar-end">
             <Link
               className={`navbar-item ${
+                activeItem === 'signup' ? 'is-active' : ''
+              }`}
+              to="/signup"
+              onClick={() => handleClick('signup')}
+            >
+              {'Sign up'}
+            </Link>
+            <Link
+              className={`navbar-item ${
                 activeItem === 'login' ? 'is-active' : ''
               }`}
               to="/login"
