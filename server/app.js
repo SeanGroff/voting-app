@@ -1,6 +1,7 @@
 (async () => {
   const express = require('express');
   const mongoose = require('mongoose');
+  const cors = require('cors');
   const session = require('express-session');
   const bodyParser = require('body-parser');
   const morgan = require('morgan');
@@ -61,6 +62,8 @@
       return cb(err);
     }
   });
+
+  app.use(cors());
 
   // Setup express session
   app.use(session({ secret, resave: false, saveUninitialized: false }));
