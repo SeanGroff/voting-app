@@ -33,7 +33,7 @@
   // generate.mongoData();
 
   // Passport Authentication
-  passport.use(
+  passport.use('login',
     new LocalStrategy(function(username, password, done) {
       UserModel.findOne({ email: username }, function(err, user) {
         if (err) {
@@ -48,6 +48,50 @@
         return done(null, user);
       });
     })
+  );
+
+  passport.use('signup', new LocalStrategy({
+      passReqToCallback : true
+    },
+    function(req, username, password, done) {
+      findOrCreateUser = function() {
+        // find a user in Mongo with provided username
+        User.findOne({ email: username}, function(err, user) {
+          // In case of any error return
+          if (err){
+            console.log('Error in SignUp: '+err);
+            return done(err);
+          }
+          // already exists
+          if (user) {
+            console.log('User already exists');
+            return done(null, false,
+          } else {
+            // if there is no user with that email
+            // create the user
+            const newUser = new UserModel({
+              name: req.param.name,
+              email: username,
+              password,
+            });
+
+            // save the user
+            newUser.save(function(err) {
+              if (err){
+                console.log('Error in Saving user: '+err);
+                throw err;
+              }
+              console.log('User Registration succesful');
+              return done(null, newUser);
+            });
+          }
+        });
+      };
+
+      // Delay the execution of findOrCreateUser and execute
+      // the method in the next tick of the event loop
+      process.nextTick(findOrCreateUser);
+    });
   );
 
   passport.serializeUser(function(user, cb) {
