@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
+import axios from 'axios';
+import { withRouter } from 'react-router-dom';
 import isEmail from 'validator/lib/isEmail';
 
 import SignUp from './SignUp';
 
-export default class SignUpContainer extends Component {
+class SignUpContainer extends Component {
   state = {
     formActive: false,
     email: '',
@@ -48,9 +50,22 @@ export default class SignUpContainer extends Component {
     });
   };
 
-  _handleSubmit = e => {
+  _handleSubmit = async e => {
     e.preventDefault();
-    console.log('Registering...');
+
+    const { name, email, password, passwordConfirm } = this.state;
+
+    try {
+      await axios.post('/signup', {
+        name,
+        email,
+        password,
+        passwordConfirm,
+      });
+      this.props.history.push('/');
+    } catch (err) {
+      console.error(`Error: ${err}`);
+    }
   };
 
   render() {
@@ -81,3 +96,5 @@ export default class SignUpContainer extends Component {
     );
   }
 }
+
+export default withRouter(SignUpContainer);

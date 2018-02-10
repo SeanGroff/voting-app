@@ -23,13 +23,16 @@ export default function SignUp({
       <div className="column" style={{ maxWidth: '512px' }}>
         <Header>Get Started Creating Polls Today!</Header>
         <div className="field">
-          <label className="label">Name</label>
+          <label className="label" for="name">
+            Name
+          </label>
           <div className="control has-icons-left">
             <input
               className={`input ${
                 formActive && name && name.length ? 'is-success' : ''
               }`}
               type="text"
+              name="name"
               placeholder="Text input"
               required
               value={name}
@@ -42,11 +45,14 @@ export default function SignUp({
         </div>
 
         <div className="field">
-          <label className="label">Email</label>
+          <label className="label" for="email">
+            Email
+          </label>
           <div className="control has-icons-left">
             <input
               className={`input ${isEmailValid && email ? 'is-success' : ''}`}
               type="email"
+              name="email"
               placeholder="Email"
               required
               value={email}
@@ -68,13 +74,16 @@ export default function SignUp({
         </div>
 
         <div className="field">
-          <label className="label">Password</label>
+          <label className="label" for="password">
+            Password
+          </label>
           <div className="control has-icons-left">
             <input
               className={`input ${
                 passwordsMatch && passwordConfirm ? 'is-success' : ''
               }`}
               type="password"
+              name="password"
               placeholder="Password"
               required
               value={password}
@@ -87,13 +96,16 @@ export default function SignUp({
         </div>
 
         <div className="field">
-          <label className="label">Confirm Password</label>
+          <label className="label" for="passwordConfirm">
+            Confirm Password
+          </label>
           <div className="control has-icons-left">
             <input
               className={`input ${
                 passwordsMatch && passwordConfirm ? 'is-success' : ''
               }`}
               type="password"
+              name="passwordConfirm"
               placeholder="Confirm Password"
               required
               value={passwordConfirm}

@@ -6,13 +6,18 @@
   const bodyParser = require('body-parser');
   const morgan = require('morgan');
   const jwt = require('jsonwebtoken');
+  const expressValidator = require('express-validator');
   const passport = require('passport');
   const LocalStrategy = require('passport-local').Strategy;
   const { graphqlExpress, graphiqlExpress } = require('apollo-server-express');
 
   const UserModel = require('./models/UserModel');
+  const userController = require('./controllers/userController');
+  const authController = require('./controllers/authController');
   const schema = require('./data/schema');
   const config = require('./config');
+
+  require('./handlers/passport');
 
   // const generate = require('./data/generate');
 
@@ -30,82 +35,11 @@
 
   const secret = await config.secret();
 
-  // generate.mongoData();
+  // serve up React frontend
+  app.use(express.static(`${__dirname}./../build`));
 
-  // Passport Authentication
-  passport.use('login',
-    new LocalStrategy(function(username, password, done) {
-      UserModel.findOne({ email: username }, function(err, user) {
-        if (err) {
-          return done(err);
-        }
-        if (!user) {
-          return done(null, false);
-        }
-        if (user.password !== password) {
-          return done(null, false);
-        }
-        return done(null, user);
-      });
-    })
-  );
-
-  passport.use('signup', new LocalStrategy({
-      passReqToCallback : true
-    },
-    function(req, username, password, done) {
-      findOrCreateUser = function() {
-        // find a user in Mongo with provided username
-        User.findOne({ email: username}, function(err, user) {
-          // In case of any error return
-          if (err){
-            console.log('Error in SignUp: '+err);
-            return done(err);
-          }
-          // already exists
-          if (user) {
-            console.log('User already exists');
-            return done(null, false,
-          } else {
-            // if there is no user with that email
-            // create the user
-            const newUser = new UserModel({
-              name: req.param.name,
-              email: username,
-              password,
-            });
-
-            // save the user
-            newUser.save(function(err) {
-              if (err){
-                console.log('Error in Saving user: '+err);
-                throw err;
-              }
-              console.log('User Registration succesful');
-              return done(null, newUser);
-            });
-          }
-        });
-      };
-
-      // Delay the execution of findOrCreateUser and execute
-      // the method in the next tick of the event loop
-      process.nextTick(findOrCreateUser);
-    });
-  );
-
-  passport.serializeUser(function(user, cb) {
-    cb(null, user._id);
-  });
-
-  passport.deserializeUser(async function(id, cb) {
-    try {
-      const user = await UserModel.findOne({ _id: id });
-      cb(null, user);
-    } catch (err) {
-      return cb(err);
-    }
-  });
+  // Exposes a bunch of methods for validating date. (Mainly in the userController)
+  app.use(expressValidator());
 
   app.use(cors());
 
@@ -118,11 +52,6 @@
 
   // use morgan to log requests to the console
   app.use(morgan('dev'));
-
-  //    * THEORY
-  //    * 1) User Stores token in localStorage
-  //    * 2) User sends the token in the header with fetch(url, options) <- req.header can go in options
-  //    * 3) Verify the JWT in each resolver ?
 
   // GraphQL
   app.use('/graphql', bodyParser.json(), (req, res) => {
@@ -143,12 +72,6 @@
   app.use(passport.session());
 
   // Routes
-  app.get('/', (req, res) => res.redirect('/login'));
-
-  app.get('/login', (req, res) => {
-    res.sendFile(`${__dirname}/views/Login.html`);
-  });
-
   app.post('/login', passport.authenticate('local'), (req, res) => {
     const payload = {
       id: req.user._id,
@@ -160,6 +83,16 @@
 
     res.json({ token });
   });
+
+  app.post(
+    '/signup',
+    // 1) Validate the registration data
+    userController.validateSignUp,
+    // 2) register the user
+    userController.register,
+    // 3) log user in
+    authController.login
+  );
 
   app.listen(PORT, () =>
     console.log(`GraphiQL running on http://localhost:${PORT}/graphiql`)
