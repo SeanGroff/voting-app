@@ -56,15 +56,18 @@ class SignUpContainer extends Component {
     const { name, email, password, passwordConfirm } = this.state;
 
     try {
-      await axios.post('/signup', {
+      const { data } = await axios.post('/signup', {
         name,
         email,
         password,
         passwordConfirm,
       });
+
+      localStorage.setItem('token', data.token);
+
       this.props.history.push('/');
     } catch (err) {
-      console.error(`Error: ${err}`);
+      console.log(err);
     }
   };
 

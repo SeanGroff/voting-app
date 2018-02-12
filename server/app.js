@@ -71,6 +71,13 @@
   app.use(passport.initialize());
   app.use(passport.session());
 
+  // ====== Error handler ====
+  app.use((err, req, res, next) => {
+    console.log('====== ERROR =======');
+    console.error(err.stack);
+    res.status(500);
+  });
+
   // Routes
   app.post('/login', passport.authenticate('local'), (req, res) => {
     const payload = {
@@ -91,7 +98,19 @@
     // 2) register the user
     userController.register,
     // 3) log user in
-    authController.login
+    authController.login,
+    // 4) send jwt to client
+    (req, res) => {
+      const payload = {
+        id: req.user._id,
+      };
+
+      const token = jwt.sign(payload, secret, {
+        expiresIn: '24h',
+      });
+
+      res.json({ token });
+    }
   );
 
   app.listen(PORT, () =>

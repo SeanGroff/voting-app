@@ -27,7 +27,6 @@ exports.validateSignUp = (req, res, next) => {
 
   if (errors) {
     console.log(errors);
-    return;
   }
 
   next();
