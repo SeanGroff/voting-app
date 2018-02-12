@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 import { withRouter } from 'react-router-dom';
 import isEmail from 'validator/lib/isEmail';
 
@@ -9,15 +10,7 @@ class LoginContainer extends Component {
     formActive: false,
     email: '',
     isEmailValid: false,
-    name: '',
     password: '',
-  };
-
-  _handleNameChange = e => {
-    this.setState({
-      name: e.target.value,
-      formActive: true,
-    });
   };
 
   _handleEmailChange = e => {
@@ -36,22 +29,34 @@ class LoginContainer extends Component {
     });
   };
 
-  _handleSubmit = e => {
+  _handleSubmit = async e => {
     e.preventDefault();
-    console.log('Logging in...');
+
+    const { email, password } = this.state;
+
+    try {
+      const { data } = await axios.post('/login', {
+        email,
+        password,
+      });
+
+      localStorage.setItem('token', data.token);
+
+      this.props.history.push('/');
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   render() {
-    const { formActive, email, isEmailValid, name, password } = this.state;
+    const { formActive, email, isEmailValid, password } = this.state;
     return (
       <Login
         formActive={formActive}
         email={email}
         isEmailValid={isEmailValid}
         password={password}
-        name={name}
         handleSubmit={this._handleSubmit}
-        handleNameChange={this._handleNameChange}
         handleEmailChange={this._handleEmailChange}
         handlePasswordChange={this._handlePasswordChange}
       />

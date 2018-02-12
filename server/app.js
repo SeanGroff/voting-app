@@ -35,9 +35,6 @@
 
   const secret = await config.secret();
 
-  // serve up React frontend
-  app.use(express.static(`${__dirname}./../build`));
-
   // Exposes a bunch of methods for validating date. (Mainly in the userController)
   app.use(expressValidator());
 
@@ -54,24 +51,25 @@
   app.use(morgan('dev'));
 
   // GraphQL
-  app.use('/graphql', bodyParser.json(), (req, res) => {
-    // needs to be tested from the Client
-    const context = {
-      token:
-        req.headers && req.headers.Authorization
-          ? req.headers.Authorization
-          : null,
-    };
-    return graphqlExpress({ schema, context })(req, res);
-  });
+  app.use(
+    '/graphql',
+    bodyParser.json(),
+    graphqlExpress(req => ({
+      schema,
+      context: { token: req.get('token') },
+    }))
+  );
 
   app.use('/graphiql', graphiqlExpress({ endpointURL: '/graphql' }));
+
+  // serve up React frontend
+  // app.use(express.static(`${__dirname}./../build`));
 
   // Passport Init
   app.use(passport.initialize());
   app.use(passport.session());
 
-  // ====== Error handler ====
+  // Error handler
   app.use((err, req, res, next) => {
     console.log('====== ERROR =======');
     console.error(err.stack);
@@ -79,7 +77,7 @@
   });
 
   // Routes
-  app.post('/login', passport.authenticate('local'), (req, res) => {
+  app.post('/login', authController.login, (req, res) => {
     const payload = {
       id: req.user._id,
     };
@@ -91,15 +89,13 @@
     res.json({ token });
   });
 
+  app.post('/logout', authController.logout);
+
   app.post(
     '/signup',
-    // 1) Validate the registration data
     userController.validateSignUp,
-    // 2) register the user
     userController.register,
-    // 3) log user in
     authController.login,
-    // 4) send jwt to client
     (req, res) => {
       const payload = {
         id: req.user._id,

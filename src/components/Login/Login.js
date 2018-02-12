@@ -9,8 +9,6 @@ export default function Login({
   email,
   isEmailValid,
   password,
-  name,
-  handleNameChange,
   handleEmailChange,
   handlePasswordChange,
   handleSubmit,
@@ -20,29 +18,7 @@ export default function Login({
       <div className="column" style={{ maxWidth: '512px' }}>
         <Header>Welcome!</Header>
         <div className="field">
-          <label className="label" for="name">
-            Name
-          </label>
-          <div className="control has-icons-left">
-            <input
-              className={`input ${
-                formActive && name && name.length ? 'is-success' : ''
-              }`}
-              type="text"
-              name="name"
-              placeholder="Text input"
-              required
-              value={name}
-              onChange={handleNameChange}
-            />
-            <span className="icon is-small is-left">
-              <i className="fas fa-user" />
-            </span>
-          </div>
-        </div>
-
-        <div className="field">
-          <label className="label" for="email">
+          <label className="label" htmlFor="email">
             Email
           </label>
           <div className="control has-icons-left">
@@ -71,7 +47,7 @@ export default function Login({
         </div>
 
         <div className="field">
-          <label className="label" for="password">
+          <label className="label" htmlFor="password">
             Password
           </label>
           <div className="control has-icons-left">
@@ -96,7 +72,7 @@ export default function Login({
           <div className="control">
             <button
               className="button is-success is-link"
-              disabled={!name.length || !email.length || !password.length}
+              disabled={!email.length || !password.length}
               onClick={handleSubmit}
             >
               Submit
@@ -123,9 +99,7 @@ Login.propTypes = {
   email: PropTypes.string,
   isEmailValid: PropTypes.bool,
   password: PropTypes.string,
-  name: PropTypes.string,
   handleSubmit: PropTypes.func.isRequired,
-  handleNameChange: PropTypes.func.isRequired,
   handleEmailChange: PropTypes.func.isRequired,
   handlePasswordChange: PropTypes.func.isRequired,
 };
