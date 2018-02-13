@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import isEmail from 'validator/lib/isEmail';
 
@@ -42,6 +43,8 @@ class LoginContainer extends Component {
 
       localStorage.setItem('token', data.token);
 
+      this.props.handleAuth(true);
+
       this.props.history.push('/');
     } catch (err) {
       console.error(err);
@@ -63,5 +66,9 @@ class LoginContainer extends Component {
     );
   }
 }
+
+LoginContainer.propTypes = {
+  handleAuth: PropTypes.func.isRequired,
+};
 
 export default withRouter(LoginContainer);

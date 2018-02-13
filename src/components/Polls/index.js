@@ -1,53 +1,22 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
+import { compose, graphql } from 'react-apollo';
 
 import Polls from './Polls';
-
-const data = [
-  {
-    topic: 'What is your favorite color?',
-  },
-  {
-    topic: 'What is your favorite band?',
-  },
-  {
-    topic: 'What is your favorite food?',
-  },
-  {
-    topic: 'What is your favorite programming language?',
-  },
-  {
-    topic: 'What is your favorite sport?',
-  },
-];
+import getPolls from '../../graphql/getPolls';
 
 class PollsContainer extends Component {
-  state = {
-    polls: [],
-    myPolls: [],
-  };
-
-  async componentDidMount() {
-    try {
-      const polls = await data;
-
-      this.setState(() => ({
-        polls,
-      }));
-    } catch (err) {
-      console.error(err);
-    }
-  }
-
   _handleClick = poll => {
     console.log(poll);
-    this.props.history.push('/poll');
+    this.props.history.push('/poll', { state: this.props.allPolls.polls });
   };
 
   render() {
-    const { polls } = this.state;
-    return <Polls handleClick={this._handleClick} polls={polls} />;
+    const { allPolls } = this.props;
+    return <Polls handleClick={this._handleClick} polls={allPolls.polls} />;
   }
 }
 
-export default withRouter(PollsContainer);
+export default compose(withRouter, graphql(getPolls, { name: 'allPolls' }))(
+  PollsContainer
+);

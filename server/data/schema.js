@@ -10,7 +10,7 @@ type Query {
   user(uid: String!): User
   users: [User]
   poll(pid: String!): Poll
-  userPolls(uid: String!): [Poll]
+  polls(uid: String): [Poll]
 }
 
 type User {

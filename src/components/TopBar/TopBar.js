@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 
 export default function TopBar({
   activeItem,
+  authenticated,
   isActive,
   handleClick,
   handleHamburgerClick,
@@ -36,7 +37,7 @@ export default function TopBar({
           </div>
           <div className="navbar-end">
             <Link
-              className={`navbar-item ${
+              className={`${authenticated ? 'hide' : ''} navbar-item ${
                 activeItem === 'signup' ? 'is-active' : ''
               }`}
               to="/signup"
@@ -45,7 +46,7 @@ export default function TopBar({
               {'Sign up'}
             </Link>
             <Link
-              className={`navbar-item ${
+              className={`${authenticated ? 'hide' : ''} navbar-item ${
                 activeItem === 'login' ? 'is-active' : ''
               }`}
               to="/login"
@@ -62,6 +63,7 @@ export default function TopBar({
 
 TopBar.propTypes = {
   activeItem: PropTypes.string,
+  authenticated: PropTypes.bool.isRequired,
   isActive: PropTypes.bool.isRequired,
   handleClick: PropTypes.func.isRequired,
   handleHamburgerClick: PropTypes.func.isRequired,

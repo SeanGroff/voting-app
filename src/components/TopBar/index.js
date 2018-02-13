@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 import TopBar from './TopBar';
 
@@ -29,9 +30,11 @@ export default class TopBarContainer extends Component {
 
   render() {
     const { activeItem, isActive } = this.state;
+    const { authenticated } = this.props;
     return (
       <TopBar
         activeItem={activeItem}
+        authenticated={authenticated}
         isActive={isActive}
         handleClick={this._handleClick}
         handleHamburgerClick={this._handleHamburgerClick}
@@ -39,3 +42,7 @@ export default class TopBarContainer extends Component {
     );
   }
 }
+
+TopBarContainer.propTypes = {
+  authenticated: PropTypes.bool.isRequired,
+};

@@ -12,7 +12,7 @@ export default function Polls({ polls, handleClick }) {
         {polls && polls.length
           ? polls.map((poll, index) => (
               <li className="box" key={index} onClick={() => handleClick(poll)}>
-                {poll.topic}
+                {poll.name}
               </li>
             ))
           : null}

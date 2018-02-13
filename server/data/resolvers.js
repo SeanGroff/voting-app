@@ -37,8 +37,13 @@ module.exports = {
         pollOptions,
       };
     },
-    async userPolls(root, args) {
-      const polls = await PollModel.find({ createdBy: args.uid });
+    async polls(root, args) {
+      let polls = [];
+      if (typeof args.uid === String && args.uid) {
+        polls = await PollModel.find({ createdBy: args.uid });
+      } else {
+        polls = await PollModel.find();
+      }
       return polls.map(poll => ({
         id: poll._id,
         name: poll.name,
