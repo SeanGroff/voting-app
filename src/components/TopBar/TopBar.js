@@ -10,7 +10,7 @@ export default function TopBar({
   handleHamburgerClick,
 }) {
   return (
-    <nav className="navbar is-light" aria-label="main navigation">
+    <nav className="navbar is-transparent" aria-label="main navigation">
       <div className="container">
         <div className="navbar-brand">
           <div className="navbar-item">Pollz</div>
@@ -26,7 +26,7 @@ export default function TopBar({
         <div className={`navbar-menu ${isActive ? 'is-active' : ''}`}>
           <div className="navbar-start">
             <Link
-              className={`navbar-item ${
+              className={`navbar-item is-hoverable ${
                 activeItem === 'home' ? 'is-active' : ''
               }`}
               to="/"
@@ -54,6 +54,26 @@ export default function TopBar({
             >
               {'Login'}
             </Link>
+            <div
+              className={`${
+                authenticated ? '' : 'hide'
+              } navbar-item has-dropdown is-hoverable ${
+                activeItem === 'mypolls' ? 'is-active' : ''
+              }`}
+            >
+              <Link
+                className="navbar-link"
+                to="/mypolls"
+                onClick={() => handleClick('mypolls')}
+              >
+                {'My Polls'}
+              </Link>
+              <div class="navbar-dropdown is-boxed">
+                <Link class="navbar-item" to="/new">
+                  {'New'}
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
       </div>

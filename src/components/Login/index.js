@@ -43,7 +43,7 @@ class LoginContainer extends Component {
 
       localStorage.setItem('token', data.token);
 
-      this.props.handleAuth(true);
+      this.props.handleAuth({ authenticated: true, username: email });
 
       this.props.history.push('/');
     } catch (err) {

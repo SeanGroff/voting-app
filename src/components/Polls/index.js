@@ -12,8 +12,15 @@ class PollsContainer extends Component {
   };
 
   render() {
-    const { allPolls } = this.props;
-    return <Polls handleClick={this._handleClick} polls={allPolls.polls} />;
+    const { allPolls, authenticated, location } = this.props;
+    return (
+      <Polls
+        authenticated={authenticated}
+        handleClick={this._handleClick}
+        location={location.pathname}
+        polls={allPolls.polls}
+      />
+    );
   }
 }
 

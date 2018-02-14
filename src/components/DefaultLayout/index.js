@@ -32,6 +32,7 @@ function PrivateRoute({ component: Component, ...rest }) {
 export default class DefaultLayout extends Component {
   state = {
     authenticated: false,
+    username: '',
   };
 
   componentDidMount() {
@@ -45,21 +46,32 @@ export default class DefaultLayout extends Component {
     }
   }
 
-  _handleAuth = authenticated => {
+  _handleAuth = ({ authenticated, username }) => {
     this.setState(() => ({
       authenticated,
+      username,
     }));
   };
 
   render() {
-    const { authenticated } = this.state;
+    const { authenticated, username } = this.state;
     return (
       <Router>
         <div>
           <TopBar authenticated={authenticated} />
           <Hero />
           <section className="container" style={{ maxWidth: '769px' }}>
-            <Route exact path="/" component={Polls} />
+            <Route
+              exact
+              path="/"
+              render={props => (
+                <Polls
+                  {...props}
+                  authenticated={authenticated}
+                  username={username}
+                />
+              )}
+            />
             <Route
               exact
               path="/login"

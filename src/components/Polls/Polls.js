@@ -4,7 +4,17 @@ import PropTypes from 'prop-types';
 import Header from '../common/Header';
 import './polls.css';
 
-export default function Polls({ polls, handleClick }) {
+export default function Polls({
+  authenticated,
+  handleClick,
+  location,
+  polls,
+  username,
+}) {
+  const pollsToRender =
+    authenticated && location === 'mypolls'
+      ? polls.filter(poll => poll.createdBy === username)
+      : polls;
   return (
     <Fragment>
       <Header>Polls</Header>
@@ -12,7 +22,14 @@ export default function Polls({ polls, handleClick }) {
         {polls && polls.length
           ? polls.map((poll, index) => (
               <li className="box" key={index} onClick={() => handleClick(poll)}>
-                {poll.name}
+                <span>{poll.name}</span>
+                <button
+                  className={`${
+                    poll.createdBy === username ? 'button is-danger' : 'hide'
+                  }`}
+                >
+                  Delete
+                </button>
               </li>
             ))
           : null}
@@ -22,6 +39,8 @@ export default function Polls({ polls, handleClick }) {
 }
 
 Polls.propTypes = {
-  polls: PropTypes.arrayOf(PropTypes.object),
+  authenticated: PropTypes.bool,
   handleClick: PropTypes.func.isRequired,
+  location: PropTypes.string.isRequired,
+  polls: PropTypes.arrayOf(PropTypes.object),
 };
